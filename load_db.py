@@ -3,7 +3,7 @@ import mysql.connector
 from collections import defaultdict
 
 # Read the combined dataset
-combined_df = pd.read_csv('combined_dataset.csv')
+combined_df = pd.read_csv('data/combined_dataset.csv')
 
 # Data cleaning and validation
 combined_df = combined_df.dropna(subset=['EPISODE'])  # Remove rows with missing episode IDs
@@ -12,8 +12,8 @@ combined_df['EPISODE'] = combined_df['EPISODE'].astype(str)  # Ensure episode ID
 # Connect to MySQL database
 mydb = mysql.connector.connect(
     host="localhost",
-    user="your_username",
-    password="your_password",
+    user="adelknode",
+    password="MU8myHoHo",
     database="joy_of_coding"
 )
 
@@ -70,7 +70,16 @@ for _, row in combined_df.iterrows():
 # Insert data into Subjects table
 for _, row in combined_df.iterrows():
     episode = row['EPISODE']
-    subjects = [unique_subjects[s.strip()] for s in row['APPLE_FRAME,AURORA_BOREALIS,BARN,BEACH,BOAT,BRIDGE,BUILDING,BUSHES,CABIN,CACTUS,CIRCLE_FRAME,CIRRUS,CLIFF,CLOUDS,CONIFER,CUMULUS,DECIDUOUS,DIANE_ANDRE,DOCK,DOUBLE_OVAL_FRAME,FARM,FENCE,FIRE,FLORIDA_FRAME,FLOWERS,FOG,FRAMED,GRASS,GUEST,HALF_CIRCLE_FRAME,HALF_OVAL_FRAME,HILLS,LAKE,LAKES,LIGHTHOUSE,MILL,MOON,MOUNTAIN,MOUNTAINS,NIGHT,OCEAN,OVAL_FRAME,PALM_TREES,PATH,PERSON,PORTRAIT,RECTANGLE_3D_FRAME,RECTANGULAR_FRAME,RIVER,ROCKS,SEASHELL_FRAME,SNOW,SNOWY_MOUNTAIN,SPLIT_FRAME,STEVE_ROSS,STRUCTURE,SUN,TOMB_FRAME,TREE,TREES,TRIPLE_FRAME,WATERFALL,WAVES,WINDMILL,WINDOW_FRAME,WINTER,WOOD_FRAME'.split(',') if s.strip()]
+    subjects = [unique_subjects[s.strip()] for s in (
+        "APPLE_FRAME,AURORA_BOREALIS,BARN,BEACH,BOAT,BRIDGE,BUILDING,BUSHES,CABIN,CACTUS,"
+        "CIRCLE_FRAME,CIRRUS,CLIFF,CLOUDS,CONIFER,CUMULUS,DECIDUOUS,DIANE_ANDRE,DOCK,"
+        "DOUBLE_OVAL_FRAME,FARM,FENCE,FIRE,FLORIDA_FRAME,FLOWERS,FOG,FRAMED,GRASS,GUEST,"
+        "HALF_CIRCLE_FRAME,HALF_OVAL_FRAME,HILLS,LAKE,LAKES,LIGHTHOUSE,MILL,MOON,MOUNTAIN,"
+        "MOUNTAINS,NIGHT,OCEAN,OVAL_FRAME,PALM_TREES,PATH,PERSON,PORTRAIT,RECTANGLE_3D_FRAME,"
+        "RECTANGULAR_FRAME,RIVER,ROCKS,SEASHELL_FRAME,SNOW,SNOWY_MOUNTAIN,SPLIT_FRAME,"
+        "STEVE_ROSS,STRUCTURE,SUN,TOMB_FRAME,TREE,TREES,TRIPLE_FRAME,WATERFALL,WAVES,"
+        "WINDMILL,WINDOW_FRAME,WINTER,WOOD_FRAME"
+    ).split(',') if s.strip()]
 
     for subject in subjects:
         sql = "INSERT INTO Subjects (EPISODE, Subject) VALUES (%s, %s)"
@@ -79,7 +88,11 @@ for _, row in combined_df.iterrows():
 # Insert data into Colors table
 for _, row in combined_df.iterrows():
     episode = row['EPISODE']
-    colors = [unique_colors[c.strip()] for c in row['Black_Gesso,Bright_Red,Burnt_Umber,Cadmium_Yellow,Dark_Sienna,Indian_Red,Indian_Yellow,Liquid_Black,Liquid_Clear,Midnight_Black,Phthalo_Blue,Phthalo_Green,Prussian_Blue,Sap_Green,Titanium_White,Van_Dyke_Brown,Yellow_Ochre,Alizarin_Crimson'.split(',') if c.strip()]
+    colors = [unique_colors[c.strip()] for c in (
+        "Black_Gesso,Bright_Red,Burnt_Umber,Cadmium_Yellow,Dark_Sienna,Indian_Red,Indian_Yellow,"
+        "Liquid_Black,Liquid_Clear,Midnight_Black,Phthalo_Blue,Phthalo_Green,Prussian_Blue,"
+        "Sap_Green,Titanium_White,Van_Dyke_Brown,Yellow_Ochre,Alizarin_Crimson"
+        ).split(',') if c.strip()]
 
     for color in colors:
         sql = "INSERT INTO Colors (EPISODE, Color) VALUES (%s, %s)"
