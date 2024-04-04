@@ -4,12 +4,17 @@ import mysql.connector
 app = Flask(__name__)
 
 # Connect to MySQL database
-mydb = mysql.connector.connect(
-    host="localhost",
-    user="adelknode",
-    password="MU8myHoHo",
-    database="joy_of_coding"
-)
+try:
+    mydb = mysql.connector.connect(
+        host="localhost",
+        user="adelknode",
+        password="MU8myHoHo",
+        database="joy_of_coding"
+    )
+    print("Connection to MySQL database successful!")
+except mysql.connector.Error as err:
+    print(f"Error connecting to MySQL database: {err}")
+    exit(1)
 
 @app.route('/episodes', methods=['GET'])
 def get_episodes():
@@ -21,6 +26,21 @@ def get_episodes():
 
     # Create a cursor object
     cursor = mydb.cursor()
+    
+    #try:
+    #    cursor = mydb.cursor()
+    #except mysql.connector.OperationalError as err:
+     #   if err.errno == mysql.connector.errorcode.CR_SERVER_LOST:
+        # Attempt to reconnect
+    #        mydb = mysql.connector.connect(
+    #            host="localhost",
+    #            user="adelknode",
+    #            password="MU8myHoHo",
+    #            database="joy_of_coding"
+    #    )
+    #    cursor = mydb.cursor()
+   # else:
+       # print(f"Error creating cursor: {err}")
 
     # Build the SQL query based on the filters
     query = "SELECT EPISODE, Title, Month FROM Episodes"
